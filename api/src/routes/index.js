@@ -13,8 +13,22 @@ const router = Router();
 // Configurar los routers
 // Ejemplo: router.use('/auth', authRouter);
 const getApiInfo = async () => {
-	const apiUrl = await axios.get(`https://api.rawg.io/api/games?key=${API_KEY}&page_size=50`);
-	const apiInfo = await apiUrl.data.results.map(el => {
+
+	let page1 = (await axios.get(`https://api.rawg.io/api/games?key=${API_KEY}`)).data;
+	let page2 = (await axios.get(`${page1.next}`)).data;
+	let page3 = (await axios.get(`${page2.next}`)).data;
+	let page4 = (await axios.get(`${page3.next}`)).data;
+	let page5 = (await axios.get(`${page4.next}`)).data;
+
+	let allPages = [
+		...page1.results, 
+		...page2.results, 
+		...page3.results, 
+		...page4.results, 
+		...page5.results
+	];
+
+	const apiInfo = allPages.map(el => {
 		return {
 			id: el.id,
 			image: el.background_image,
@@ -44,36 +58,67 @@ const getDbInfo = async () => {
 const getAllVideogames = async () => {
 	const apiInfo = await getApiInfo();
 	const dbInfo = await getDbInfo();
-	const infoTotal = apiInfo.concat(dbInfo);
+	const infoTotal = dbInfo.concat(apiInfo);
 	return infoTotal;
 }
 
 router.get('/videogames', async (req, res) => {
 	const name = req.query.name;
-	// console.log(name);
 	let videogamesTotal = await getAllVideogames();
 	if (name){
 		let videogameName = videogamesTotal.filter( el => el.name.toLowerCase().includes(name.toLowerCase()) );
 		videogameName.length ?
-		res.status(200).send(videogameName) :
+		res.status(200).send(videogameName.slice(0, 15)) :
 		res.status(404).send('Videogame not found.');
 	} else {
 		res.status(200).send(videogamesTotal);
 	}
 });
 
+router.get('/videogame/:id', async (req, res) => {
+	const id = req.params.id;
+	const videogamesTotal = await getAllVideogames();
+	if(id) {
+		let videogameId = await videogamesTotal.filter(e => e.id == id);
+		videogameId.length ?
+		res.status(200).json(videogameId) :
+		res.status(404).send('Videogame not found');
+	}
+});
+
+router.post('/videogames', async (req, res) => {
+	let { image, name, description, released, rating, platforms, createdInDb, genres  } = req.body;
+	console.log(req.body);
+	let gameCreated = await Videogame.create({
+		image,
+		name,
+		description, 
+		released,
+		rating,
+		platforms,
+		createdInDb
+	});
+
+	let genresDb = await Genre.findAll({
+		where: {
+			name: genres
+		} 
+	})
+	console.log(genresDb);
+	gameCreated.addGenres(genresDb);
+	res.send('Videogame created successfully.');
+	
+});
+
 router.get('/genres', async (req, res) => {
 	const genresApi = await axios.get(`https://api.rawg.io/api/genres?key=${API_KEY}`);
-	// const results = await genresApi.data.results.map(el => {
 	await genresApi.data.results.map(el => {
 		Genre.findOrCreate({
 			where: { name: el.name }
 		})
-		// console.log(el.name);
 	});
 	const genres = await Genre.findAll();
 	res.send(genres);
-})
-
+});
 
 module.exports = router;

@@ -10,6 +10,10 @@ module.exports = (sequelize) => {
 		allowNull: false,
 		primaryKey: true,
 	},
+	image: {
+		type: DataTypes.STRING,
+		allowNull: false,
+	},
     name: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -25,7 +29,8 @@ module.exports = (sequelize) => {
 		type: DataTypes.FLOAT,
 	},
 	platforms: {
-		type: DataTypes.ARRAY(DataTypes.STRING),
+		// type: DataTypes.ARRAY(DataTypes.STRING),
+		type: DataTypes.STRING,
 		allowNull: false,
 	},
 	createdInDb: {
