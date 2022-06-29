@@ -44,13 +44,19 @@ const getApiInfo = async () => {
 }
 
 const getDbInfo = async () => {
-	return await Videogame.findAll({
+	const dbGames = await Videogame.findAll({
 		include: {
 			model: Genre,
 			attributes: ['name'],
 			through: {
 				attributes: [],
 			},
+		}
+	})
+	return dbGames.map((v) => {
+		return {
+			...v.dataValues,
+			genres: v.genres.map(e => e.name)
 		}
 	})
 }
@@ -107,7 +113,6 @@ router.post('/videogames', async (req, res) => {
 	console.log(genresDb);
 	gameCreated.addGenres(genresDb);
 	res.send('Videogame created successfully.');
-	
 });
 
 router.get('/genres', async (req, res) => {
