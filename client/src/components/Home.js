@@ -126,19 +126,28 @@ const Home = () => {
 			</nav>
 			
 			<div className='main'>
+
+				
+
 				<div className="cards">	
 					{
-						currentGames && currentGames.map( el => (
-							<Card 
-								id={el.id}
-								name={el.name} 
-								image={el.image} 
-								genres={el.genres}
-								key={el.id}
-							/>
-						))
+						currentGames.length ?
+							currentGames && currentGames.map( el => (
+								<Card 
+									id={el.id}
+									name={el.name} 
+									image={el.image} 
+									genres={el.genres}
+									key={el.id}
+								/>
+							))
+						:
+						<div className='loading'>
+							<h2>Loading...</h2>
+						</div>
 					}
 				</div>
+
 			</div>
 		
 		</div>

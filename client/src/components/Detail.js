@@ -15,40 +15,54 @@ const Detail = () => {
 
 	useEffect(() => {
 		dispatch(getDetail(id));
-		return () => { dispatch(resetDetail(dispatch)) }
+		dispatch(resetDetail());
 	}, [dispatch, id]);
 
 	return (
 		<div className='site-main'>
-			<Header />
-			<Link to='/home'><button>Back</button></Link>
-			{myVideogame ? (
-			<div className='main detail'>
-				<div className="img">
-					<img src={myVideogame.image} alt="alt text" />
+			<header className='site-header'>
+				<div className='header main'>
+					<h1 className='site-title'>
+						<Link to={'/'}><span>B</span>lack <span>M</span>esa <span>G</span>ames</Link>
+					</h1>
+
+					<div className='search'>
+						<Link to='/home'><button>Back</button></Link>
+					</div>
 				</div>
-				<div className="info">
-					<h1>{myVideogame.name}</h1>
-					{ parse(`${myVideogame.description}`) }
-					<p>Released: {myVideogame.released}</p>
-					<p>Platforms: {myVideogame.platforms?.map((p, i) => (
-						<span key={i}>{p}</span>
-					))}</p>
-					<p>Genres: 
-					{
-						myVideogame.genres?.map((g, i) => (
-							<span key={i}>{g.name}</span>
-						))
-					}
-					</p>
-				</div>
-			</div>
-			) : (
-				<div>
-					<h2>Loading</h2>
-				</div>
-			)
+			</header>
+
+			{
+				myVideogame.name 
+				?
+
+					<div className='main detail'>
+						<div className="img">
+							<img src={myVideogame.image} alt="alt text" />
+						</div>
+						<div className="info">
+							<h1>{myVideogame.name}</h1>
+							{ parse(`${myVideogame.description}`) }
+							<p>Released: {myVideogame.released}</p>
+							<p>Platforms: {myVideogame.platforms?.map((p, i) => (
+								<span key={i}>{p}</span>
+							))}</p>
+							<p>Genres: 
+							{
+								myVideogame.genres?.map((g, i) => (
+									<span key={i}>{g.name}</span>
+								))
+							}
+							</p>
+						</div>
+					</div>
+
+				:
+					<div className='loading'>
+						<h2>Loading...</h2>
+					</div>
 			}
+
 		</div>
 	)
 }

@@ -7,14 +7,18 @@ const { API_KEY } = process.env;
 const router = Router();
 
 router.get('/', async (req, res) => {
-	const genresApi = await axios.get(`https://api.rawg.io/api/genres?key=${API_KEY}`);
-	await genresApi.data.results.map(el => {
-		Genre.findOrCreate({
-			where: { name: el.name }
-		})
-	});
-	const genres = await Genre.findAll();
-	res.send(genres);
+	try {
+		const genresApi = await axios.get(`https://api.rawg.io/api/genres?key=${API_KEY}`);
+		await genresApi.data.results.map(el => {
+			Genre.findOrCreate({
+				where: { name: el.name }
+			})
+		});
+		const genres = await Genre.findAll();
+		res.send(genres);
+	} catch (error) {
+		res.status(404).json({message: error.message});
+	}
 });
 
 module.exports = router;

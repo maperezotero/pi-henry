@@ -25,9 +25,10 @@ const SearchBar = ({paginado}) => {
 		<form>
 			<input 
 				type="text"
-				placeholder='Search...'	
+				placeholder='Search game...'	
 				onChange={(e) => handleInputChange(e)}
 				value={name}
+				maxLength='300'
 			/>
 			<button type='submit' onClick={(e) => handleSubmit(e)}>Search</button>
 		</form>
