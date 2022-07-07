@@ -1,0 +1,14 @@
+// @import "./generic/box-sizing";
+@import "./generic/modern-normalize";
+@import "./generic/reset";
+@import "./generic/body";
+
+@import "components/landing";
+@import "components/home";
+@import "components/detail";
+@import "components/form";
+
+.site-main {
+	margin: 0 auto;
+	max-width: 1200px;
+}

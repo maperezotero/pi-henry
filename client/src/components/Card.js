@@ -1,10 +1,13 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
-const Card = ({ image, name, genres }) => {
+const Card = ({ id, image, name, genres }) => {
 	return (
-		<div>
-			<h3>{name}</h3>
-			<img src={image} alt="Img not found" width="200px" height="250px" />
+		<div className='card'>
+			<div className='img'>
+				<img src={image} alt={name} />
+			</div>
+			<h3><Link to={`/videogame/${id}`}>{name}</Link></h3>
 			<div>
 				<span>{genres.join(' - ')}</span>
 			</div>

@@ -1,0 +1,32 @@
+.detail {
+	display: flex;
+	column-gap: 2rem;
+
+	.img, .info {
+		width: 50%;
+	}
+
+	img {
+		max-width: 600px;
+		height: auto;
+	}
+
+	.info {
+		line-height: 1.7rem;
+		h1 {
+			margin-bottom: 1.5rem;
+		}
+
+		p {
+			margin: 1rem 0;
+		}
+
+		span {
+			margin: 0 .5rem;
+			background: #FF0E1F;
+			padding: 5px 10px;
+			border-radius: 5px;
+			font-size: .9rem;
+		}
+	}
+}

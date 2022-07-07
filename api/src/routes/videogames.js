@@ -1,21 +1,11 @@
 require('dotenv').config();
 const { Router } = require('express');
 const axios = require('axios');
+const { Videogame, Genre } = require('../db');
 const { API_KEY } = process.env;
-const { Genre, Videogame } = require('../db');
-// const e = require('express');
-
-const genresRouter = require('./genres');
-// const videogamesRouter = require('./videogames');
-const videogameRouter = require('./videogame');
-
-// Importar todos los routers;
-// Ejemplo: const authRouter = require('./auth.js');
 
 const router = Router();
 
-// Configurar los routers
-// Ejemplo: router.use('/auth', authRouter);
 const getApiInfo = async () => {
 
 	let page1 = (await axios.get(`https://api.rawg.io/api/games?key=${API_KEY}`)).data;
@@ -72,7 +62,7 @@ const getAllVideogames = async () => {
 	return infoTotal;
 }
 
-router.get('/videogames', async (req, res) => {
+router.get('/', async (req, res) => {
 	const name = req.query.name;
 	let videogamesTotal = await getAllVideogames();
 	if (name){
@@ -85,21 +75,8 @@ router.get('/videogames', async (req, res) => {
 	}
 });
 
-// router.use('/videogames', videogamesRouter);
 
-router.use('/videogame', videogameRouter);
-// router.get('/videogame/:id', async (req, res) => {
-// 	const id = req.params.id;
-// 	const videogamesTotal = await getAllVideogames();
-// 	if(id) {
-// 		let videogameId = await videogamesTotal.filter(e => e.id == id);
-// 		videogameId.length ?
-// 		res.status(200).json(videogameId) :
-// 		res.status(404).send('Videogame not found');
-// 	}
-// });
-
-router.post('/videogames', async (req, res) => {
+router.post('/', async (req, res) => {
 	let { image, name, description, released, rating, platforms, createdInDb, genres  } = req.body;
 	console.log(req.body);
 	let gameCreated = await Videogame.create({
@@ -121,19 +98,5 @@ router.post('/videogames', async (req, res) => {
 	gameCreated.addGenres(genresDb);
 	res.send('Videogame created successfully.');
 });
-
-router.use('/genres', genresRouter);
-
-// router.get('/genres', async (req, res) => {
-// 	const genresApi = await axios.get(`https://api.rawg.io/api/genres?key=${API_KEY}`);
-// 	await genresApi.data.results.map(el => {
-// 		Genre.findOrCreate({
-// 			where: { name: el.name }
-// 		})
-// 	});
-// 	const genres = await Genre.findAll();
-// 	res.send(genres);
-// });
-
 
 module.exports = router;

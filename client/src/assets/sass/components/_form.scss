@@ -1,0 +1,15 @@
+
+.create-form {
+	max-width: 600px;
+	margin: 2rem auto;
+	padding: 0 1rem;
+
+	.form-group {
+		display: flex;
+		flex-direction: column;
+		gap: 1rem;
+		// align-items: center;
+		/* justify-content: center; */
+		margin-bottom: 1rem;
+	}
+}

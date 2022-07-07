@@ -1,5 +1,5 @@
 import React from 'react';
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { getVideogames, getGenres, filterByGenre, filterCreated, orderByName } from '../actions';
 import { Link } from 'react-router-dom';
@@ -34,15 +34,10 @@ const Home = () => {
 	  dispatch(getGenres())
 	}, [dispatch])
 
-	const refOrder = useRef(null);
-	const refGenre = useRef(null);
-
 	function handleReset(e) {
 		e.preventDefault();
 		dispatch(getVideogames());
-		refOrder.current.value = 'default';
-		refGenre.current.value = 'All';
-		paginado(1);
+		
 	}
 
 	function handleSort(e) {
@@ -80,7 +75,7 @@ const Home = () => {
 
 					<div className="form-group">
 						<label>Order: </label>
-						<select ref={refOrder} onChange={e => handleSort(e)}>
+						<select onChange={e => handleSort(e)}>
 							<option value='default'>Default</option>
 							<option value='asc'>Ascending</option>
 							<option value='desc'>Descending</option>
@@ -89,7 +84,7 @@ const Home = () => {
 
 					<div className="form-group">
 						<label>Genre: </label>
-						<select ref={refGenre} onChange={e => handleFilterGenre(e)}>
+						<select onChange={e => handleFilterGenre(e)}>
 							<option value="All">All</option>
 							{allGenres?.map((g) => {
 								return (
@@ -134,7 +129,7 @@ const Home = () => {
 								name={el.name} 
 								image={el.image} 
 								genres={el.genres}
-								key={el.id}
+								key={el.id} 
 							/>
 						))
 					}

@@ -1,0 +1,24 @@
+.landing {
+	text-align: center;
+	background-color: aliceblue;
+	min-height: 100vh;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+
+	button {
+		border-radius: 5px;
+		border: 1px solid #ccc;
+		padding: 1rem 2rem;
+		cursor: pointer;
+		font-size: 3rem;
+		text-transform: uppercase;
+
+		a {
+			text-decoration: none;
+			&:hover {
+				text-decoration: underline;
+			}
+		}
+	}
+}
