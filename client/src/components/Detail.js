@@ -4,7 +4,6 @@ import { useParams } from 'react-router-dom';
 import { getDetail, resetDetail } from '../actions';
 import { Link } from 'react-router-dom';
 import parse from 'html-react-parser';
-import Header from './Header';
 
 const Detail = () => {
 
