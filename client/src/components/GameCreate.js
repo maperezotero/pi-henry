@@ -34,7 +34,7 @@ const GameCreate = () => {
 	// let validateReleaseDate = /^\d{4}-\d{2}-\d{2}$/;
 	let validateDescription = /^.{5,1000}$/;
 
-	function validate(inpupt) {
+	function validate(input) {
 		let errors = {}
 		if (!noEmpty.test(input.name) || !validateName.test(input.name) || input.name < 3) {
 			errors.name = 'Name is required and must have more than 3 characters';
@@ -45,15 +45,16 @@ const GameCreate = () => {
 		if (!validateDescription.test(input.description) || parseInt(input.description) < 1) {
 			errors.description = 'Description should be between 5 and 1000 characters'
 		}
-		// if (!validateReleaseDate.test(input.released) || parseInt(input.released) < 1) {
-			// errors.released = 'Release date is required';
-		// }
 		if (!validateReleaseDate.test(input.released)) {
 			errors.released = 'Release date is required';
 		}
 		if (!validateRating.test(input.rating) || parseInt(input.rating) < 1) {
 			errors.rating = 'Rating must be a number between 1 and 5';
 		}
+		if (input.genres.length < 1) {
+			errors.genres = 'You must select 1 genre minimum';
+		}
+
 		return errors;
 	}
 
@@ -83,6 +84,10 @@ const GameCreate = () => {
 				...input,
 				genres: [ ...input.genres, e.target.value ]
 			})
+			setErrors(validate({
+				...input,
+				[e.target.name]: e.target.value
+			}))
 		}
 		console.log(input.genres);
 	}
@@ -97,7 +102,8 @@ const GameCreate = () => {
 			!errors.image &&
 			!errors.description &&
 			!errors.released &&
-			!errors.rating
+			!errors.rating &&
+			!errors.genres
 		) {
 			dispatch(postVideogames(input));
 			alert('Videogame Created');
@@ -231,6 +237,7 @@ const GameCreate = () => {
 							<span>x</span> {g}
 						</p>
 					)}
+					{ errors.genres && (<p className="error">{errors.genres}</p>)}
 
 					<div className='submit-button'>
 						<button 
